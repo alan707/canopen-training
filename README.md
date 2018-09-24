@@ -3,12 +3,42 @@ CANOpen Training
 
 ### Excercise 1
 
-Install can-utils
-
+1. Install can-utils
+```sh
     $ sudo apt-get update
     $ sudo apt-get install can-utils
+```
+2. Form teams of 2 people each (Blue and Red)
 
-### Clone CANOpenSocket Repo
+3. Connect wiring as follows:
+
+![alt text](img/red_blue_teams.png)
+
+4. Once USB cable is connected, run the following:
+
+```sh
+    $ sudo slcand -o -c -s6 /dev/ttyACM* can0
+    $ sudo ifconfig can0 up
+    $ sudo ifconfig txqueuelen 1000 
+```
+
+Make sure `can0` is up and running:
+    
+    $ ifconfig can0
+    
+
+## Red Team
+
+Using `cangen` from `can-utils` transmit the following:
+- send CAN message with `CAN ID: 0x7E0`
+- Data Length: 3 bytes
+- Data payload: `00 FF 00`
+- Gap (ms): 100
+
+## Blue Team
+
+- Using `candump` from `can-utils` confirm you received `CAN ID: 0x7E0`
+- using `cangen` from `can-utils`, flood the CAN bus with random messages at 10ms
 
 
 ### Excercise 2
@@ -25,7 +55,7 @@ Clone the project from git repository and get submodules:
 
 ### Download CANOpen GUI Application
 
-
+Unzip the CANOpen GUI [EMTAS CDE GUI Application](zipped_archives/linux-emtas-cde-2_8_2.zip) and save at the root of this directory.
 
 ### Blue and Red Teams: Test CAN dump
 
@@ -39,18 +69,35 @@ You should see it in ifconfig.  Run:
 
     $ ifconfig
 
-If you haven't yet, install `can-utils`  
+If you haven't yet, install `can-utils`
 
     $ sudo apt-get install can-utils
 
+### Blue and Red Teams: Compile CANOpenSocket applications
 
-### Blue Teams: Set up Node 2 device
+Compile canopencomm
 
-From terminal, compile and start *canopend*.
+    $ cd CANopenSocket/canopencomm
+    $ make
+
+Check it works with:
+
+    $ ./canopencomm --help
+    
+Compile canopend
 
     $ cd CANopenSocket/canopend
     $ make
+
+Check it works with:
+
     $ app/canopend --help
+
+
+### Blue Teams: Set up Node 32 device
+
+From terminal, compile and start *canopend*.
+
     $ echo - > od4_storage
     $ echo - > od4_storage_auto
     $ app/canopend vcan0 -i 32 -s od4_storage -a od4_storage_auto
@@ -61,10 +108,10 @@ In a separete terminal, now run:
     
 And you should see an output similar to this:
 
-    vcan0  704   [1]  00                        # Bootup message.
+    vcan0  720   [1]  00                        # Bootup message.
     vcan0  084   [8]  00 50 01 2F F3 FF FF FF   # Emergency message.
-    vcan0  704   [1]  7F                        # Heartbeat messages
-    vcan0  704   [1]  7F                        # one per second.
+    vcan0  720   [1]  7F                        # Heartbeat messages
+    vcan0  720   [1]  7F                        # one per second.
 
 
 Now there is operational state (0x05) and there shows one PDO on CAN
@@ -80,12 +127,6 @@ Start *canopend* (master on nodeID=2) in the same
     $ app/canopend vcan0 -i 2 -c "/home/$USER/canopensocket"
 
 
-
-
-Compile and start canopencomm.
-
-    $ cd CANopenSocket/canopencomm
-    $ make
     $ ./canopencomm --help
 
 #### SDO master
@@ -121,3 +162,8 @@ only NMT messages are accepted.
     $ ./canopencomm 2 reset node -s "/home/$USER/canopensocket"
 
 In *canopend terminal* you see, that both devices finished. You will need to manually start up `Node 32` and `Node 2`
+
+### Excercise 3
+
+We will build on top of the existing CAN bus.
+
