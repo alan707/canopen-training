@@ -1,6 +1,16 @@
 CANOpen Training
 -----------------------------------
 
+### READ THIS FIRST
+
+Before taking the class, make sure you download this entire repository ahead of class.
+
+    $ cd /home/$USER
+    $ git clone git@github.com:alan707/canopen-training.git
+    
+This material is completely open source so feel free to modify/improve and make a pull request to merge any changes.
+
+
 ### Excercise 1
 
 1. Install can-utils
@@ -166,4 +176,33 @@ In *canopend terminal* you see, that both devices finished. You will need to man
 ### Excercise 3
 
 We will build on top of the existing CAN bus.
+
+1. Open up EMTAS GUI application by running:
+```sh
+    $ ./canopen-training/linux-emtas-cde-2_8_2/cde.sh
+```
+
+2. Check settings to make sure you are running on `vcan0` at `125 kbps`
+
+![can_interface_setting](img/CAN_interface_settings.png)
+
+3. Find the "Connect to CAN" icon:
+
+![alt text](img/start_can_connection.png)
+
+4. Load Repository with EDS files located at `canopen-training/EDS_Files`
+
+![alt text](img/EDS_repository.png)
+
+5. Under Object Browse, click on Read button
+
+![alt text](img/read_canopen_objects.png) 
+
+6. You should see a screen like this:
+
+![alt text](img/EMTAS_GUI_screenshot.png)
+
+
+
+
 
