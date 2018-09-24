@@ -1,0 +1,21 @@
+# file: ~/.tmuxp/commander.yaml
+session_name: canopen
+windows:
+- window_name: canopen
+  focus: 'true'
+  layout: 749f,204x61,0,0{101x61,0,0[101x6,0,0,1,101x6,0,7,2,101x47,0,14,3],102x61,102,0,4}
+  shell_command_before:
+    - cd ~/opensource/CANopenSocket/
+  panes:
+    - shell_command_before:
+      - ./canopend/app/canopend vcan0 -i 4 -s od4_storage -a od4_storage_auto &
+    - shell_command_before:
+      - rm /home/$USER/canopensocket
+      - ./canopend/app/canopend vcan0 -i 3 -s od4_storage -a od4_storage_auto -c "/home/$USER/canopensocket" &
+    - shell_command:
+      - cd canopencomm
+      - ./canopencomm [1] 4 read 0x1017 0 i16 -s "/home/$USER/canopensocket"
+      - ./canopencomm [1] 4 write 0x1017 0 i16 5000 -s "/home/$USER/canopensocket"
+    - shell_command:
+      - candump vcan0
+      
