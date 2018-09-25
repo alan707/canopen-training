@@ -27,9 +27,9 @@ This material is completely open source so feel free to modify/improve and make 
 4. Once USB cable is connected, run the following:
 
 ```sh
-    $ sudo slcand -o -c -s6 /dev/ttyACM* can0
+    $ sudo slcand -o -c -s4 /dev/ttyACM* can0
     $ sudo ifconfig can0 up
-    $ sudo ifconfig txqueuelen 1000 
+    $ sudo ifconfig can0 txqueuelen 1000 
 ```
 
 Make sure `can0` is up and running:
